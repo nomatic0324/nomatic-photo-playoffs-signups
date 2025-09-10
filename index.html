@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NOMATIC Photo Playoff – Sign Up</title>
+<meta name="description" content="Enter the NOMATIC Photo Playoff Bracket. Compete head-to-head to capture the best shots of NOMATIC products.">
+<style>
+  :root {
+    --black:#0B0E10; --gray-900:#14181B; --white:#FFFFFF;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; padding:0;
+    background:var(--black); color:var(--white);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial;
+  }
+  .wrap { max-width:1000px; margin:0 auto; padding:0 20px; }
+  header {
+    position:relative; overflow:hidden; padding:40px 0 80px;
+    background:linear-gradient(180deg,#121518,#0B0E10);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    text-align:center;
+  }
+  header::before {
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background-image:
+      linear-gradient(#ffffff26 0 0),
+      linear-gradient(#ffffff26 0 0),
+      linear-gradient(#ffffff26 0 0),
+      linear-gradient(#ffffff26 0 0);
+    background-size: 160px 2px, 120px 2px, 160px 2px, 120px 2px;
+    background-repeat:no-repeat;
+    background-position: 6% 30%, 12% 50%, 94% 30%, 88% 50%;
+    opacity:.6;
+  }
+  h1 { font-size:2.5rem; margin:0.5rem 0; font-weight:800; }
+  .sub { color:#D3D8DC; max-width:60ch; margin:0 auto 1rem; }
+  .card {
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:12px;
+    padding:20px;
+    margin-top:20px;
+  }
+  form { display:grid; gap:14px; }
+  input, textarea {
+    width:100%; padding:12px 14px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,.2);
+    background:#0F1316; color:#fff;
+  }
+  .btn {
+    appearance:none; border:0;
+    padding:14px 16px;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+    background:#fff; color:#0B0E10;
+  }
+  .muted { color:#9EABB2; font-size:.9rem; }
+  h2 { margin-top:0; }
+  ul { margin:0 0 1rem 1.2rem; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Think You’ve Got the Shot?</h1>
+    <p class="sub">Enter the <strong>NOMATIC Photo Playoff Bracket</strong> — a head-to-head product photo tournament. Winner earns prizes, bragging rights, and the title of <strong>NOMATIC Photo Champion</strong>.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- Signup Form -->
+  <section class="card">
+    <h2>Sign Up</h2>
+    <form id="signup-form">
+      <input type="text" name="name" placeholder="Full Name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="text" name="instagram" placeholder="Instagram Handle">
+      <input type="text" name="tiktok" placeholder="TikTok Handle">
+      <input type="url" name="portfolio" placeholder="Portfolio / Website">
+      <textarea name="note" rows="3" placeholder="Why do you want to compete? (optional)"></textarea>
+      <label class="muted"><input type="checkbox" required> I agree to the Terms & Conditions and understand NOMATIC may use submitted photos in perpetuity.</label>
+      <button class="btn" type="submit">Submit Application</button>
+      <p id="status" class="muted"></p>
+    </form>
+  </section>
+
+  <!-- Rules -->
+  <section class="card">
+    <h2>Competition Rules</h2>
+    <p><strong>Round Format</strong></p>
+    <ul><li>Head-to-head matchups.</li><li>Both photographers shoot the same product.</li><li>Photos submitted at the end for judging.</li></ul>
+    <p><strong>Time Limit</strong></p>
+    <ul><li>Each creator has <u>one week</u> to complete and submit.</li><li>No late submissions accepted.</li></ul>
+    <p><strong>Editing</strong></p>
+    <ul><li>Basic edits only (exposure, crop, color).</li><li>No heavy compositing or AI.</li></ul>
+    <p><strong>Judging Criteria</strong></p>
+    <ul><li>Creativity (25%)</li><li>Composition & Lighting (25%)</li><li>Product Focus & Clarity (25%)</li><li>Brand Aesthetic (25%)</li></ul>
+    <p><strong>Eliminations</strong></p>
+    <ul><li>Judges + audience votes decide winners.</li><li>Single-elimination until Champion remains.</li></ul>
+  </section>
+
+  <!-- Guidelines -->
+  <section class="card">
+    <h2>Competitor Guidelines</h2>
+    <ul>
+      <li>Keep the product safe & clean.</li>
+      <li>Stay on theme — sleek, modern, adventurous.</li>
+      <li>Have fun! Creativity and community matter.</li>
+    </ul>
+  </section>
+
+  <!-- Prizes -->
+  <section class="card">
+    <h2>Prizes</h2>
+    <ul>
+      <li>🏆 Winner: NOMATIC Travel/Photography gear + spotlight</li>
+      <li>🥈 Runner-Up: NOMATIC prize pack</li>
+      <li>📸 All Participants: Social exposure + product seeding</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="wrap" style="text-align:center; margin-top:40px;">
+  <p class="muted">© <span id="year"></span> NOMATIC. All rights reserved.</p>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Replace with your Google Apps Script Web App URL
+  const SCRIPT_URL = "https://SCRIPT_ID_REPLACE_ME/exec";
+
+  const form = document.getElementById("signup-form");
+  const statusEl = document.getElementById("status");
+
+  async function isFull() {
+    try {
+      const r = await fetch(SCRIPT_URL + "?mode=count");
+      const data = await r.json();
+      return data && data.full === true;
+    } catch (e) { return false; }
+  }
+
+  window.addEventListener("load", async () => {
+    if (await isFull()) {
+      form.querySelector("button").disabled = true;
+      statusEl.textContent = "Entries are full (20/20). Signups closed.";
+    }
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const payload = Object.fromEntries(fd.entries());
+    statusEl.textContent = "Submitting…";
+    try {
+      const r = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await r.json();
+      if (data && data.ok) {
+        window.location.href = "thank-you.html";
+      } else if (data.reason === "full") {
+        statusEl.textContent = "Entries are full (20/20). Signups closed.";
+        form.querySelector("button").disabled = true;
+      } else {
+        statusEl.textContent = "Error. Please try again later.";
+      }
+    } catch (err) {
+      statusEl.textContent = "Network error. Try again.";
+    }
+  });
+</script>
+</body>
+</html>
